@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\Resources\PersonResource;
+use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -18,8 +19,11 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+    public function boot(UrlGenerator $url): void
     {
         PersonResource::withoutWrapping();
+        if (env('APP_ENV') == 'production') {
+            $url->forceScheme('https');
+        }
     }
 }
